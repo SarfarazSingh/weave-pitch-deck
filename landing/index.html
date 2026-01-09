@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEAVE - Coffee Meetups for IMBA Students</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Colorful floating orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: #ff6b6b;
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: #4ecdc4;
+            bottom: 20%;
+            left: -50px;
+            animation-delay: -2s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: #a855f7;
+            top: 40%;
+            right: 10%;
+            animation-delay: -4s;
+        }
+
+        .orb-4 {
+            width: 200px;
+            height: 200px;
+            background: #fbbf24;
+            bottom: -50px;
+            right: 30%;
+            animation-delay: -6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: #fff;
+        }
+
+        /* Main content wrapper */
+        .main-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .headline {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            max-width: 700px;
+        }
+
+        .headline .highlight-1 { color: #4ecdc4; }
+        .headline .highlight-2 { color: #ff6b6b; }
+        .headline .highlight-3 { color: #fbbf24; }
+
+        .subheadline {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.7);
+            max-width: 550px;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .badges {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .badge {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* CTA */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: #000;
+            background: #fff;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255,255,255,0.3);
+        }
+
+        .cta-button svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .cta-button:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* How it works section */
+        .how-it-works {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #fff;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            text-align: left;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-2px);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .step:nth-child(1) .step-number { background: #4ecdc4; color: #000; }
+        .step:nth-child(2) .step-number { background: #ff6b6b; color: #000; }
+        .step:nth-child(3) .step-number { background: #a855f7; color: #000; }
+
+        .step-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .step-content p {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.5;
+        }
+
+        /* Stats section */
+        .stats {
+            padding: 4rem 2rem 8rem;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat:nth-child(1) .stat-value { color: #4ecdc4; }
+        .stat:nth-child(2) .stat-value { color: #ff6b6b; }
+        .stat:nth-child(3) .stat-value { color: #fbbf24; }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        footer a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav, footer {
+                padding: 1rem 1.5rem;
+            }
+
+            .orb {
+                filter: blur(60px);
+                opacity: 0.5;
+            }
+
+            .orb-1 { width: 250px; height: 250px; }
+            .orb-2 { width: 200px; height: 200px; }
+            .orb-3 { width: 150px; height: 150px; }
+            .orb-4 { width: 120px; height: 120px; }
+
+            .badges {
+                gap: 1rem;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+
+            .stats-grid {
+                gap: 1.5rem;
+            }
+
+            .stat {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    
+    <nav>
+        <div class="logo">WEAVE</div>
+    </nav>
+
+    <main class="main-content">
+        <section class="hero">
+            <h1 class="headline">
+                <span class="highlight-1">Small coffee meetups.</span><br>
+                <span class="highlight-2">Real conversations.</span><br>
+                <span class="highlight-3">Madrid.</span>
+            </h1>
+            <p class="subheadline">
+                We're piloting interest-based coffee meetups to help IMBA students meet people from other sections — casually, in small groups, over coffee.
+            </p>
+            <p class="tagline">
+                No dating. No awkward networking. Just genuine conversations.
+            </p>
+            <div class="badges">
+                <span class="badge">📍 Madrid</span>
+                <span class="badge">🎓 IMBA</span>
+                <span class="badge">☕ Pilot phase</span>
+            </div>
+            <a href="#" class="cta-button">
+                Sign Up
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </a>
+        </section>
+
+        <section class="how-it-works">
+            <h2 class="section-title">How it works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Sign up</h3>
+                        <p>Complete a quick 1–2 minute questionnaire about your interests</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Get matched</h3>
+                        <p>We'll match you with 5-6 people based on shared interests</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Meet up</h3>
+                        <p>We send you the location to meet your peers for coffee</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">60+</div>
+                    <div class="stat-label">students already signed up</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">☕</div>
+                    <div class="stat-value">10+</div>
+                    <div class="stat-label">partner cafés</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-value">1–2</div>
+                    <div class="stat-label">meetups per week during pilot</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <span>© 2026 WEAVE</span>
+        <a href="#">@weave</a>
+    </footer>
+</body>
+</html>
