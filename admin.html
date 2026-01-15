@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WEAVE Admin — Groups</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#F5F0E8; color:#3D3024; margin:0; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem; border-bottom:1px solid rgba(61,48,36,0.12); background:rgba(255,255,255,0.8); backdrop-filter:blur(8px); position:sticky; top:0; }
+    h1 { font-size:1.4rem; margin:0; }
+    main { max-width:900px; margin:2rem auto; padding:0 1rem; }
+    .controls { display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem; }
+    button { background:#3D3024; color:#F5F0E8; border:none; border-radius:10px; padding:0.6rem 0.9rem; cursor:pointer; }
+    button.secondary { background:#8B7355; }
+    button:disabled { opacity:0.6; cursor:not-allowed; }
+    .status { font-size:0.9rem; color:rgba(61,48,36,0.7); margin-top:0.5rem; }
+    .card { background:#fff; border:1px solid rgba(61,48,36,0.1); border-radius:12px; padding:1rem; margin-bottom:0.75rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:0.75rem; }
+    .meta { font-size:0.85rem; color:rgba(61,48,36,0.7); }
+    .tag { display:inline-block; background:#E8D5C4; color:#3D3024; border-radius:999px; padding:0.2rem 0.5rem; font-size:0.8rem; margin-right:0.25rem; }
+    a { color:#3D3024; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WEAVE Admin — Groups</h1>
+    <a href="/" title="Back to site">← Back</a>
+  </header>
+  <main>
+    <div class="controls">
+      <button id="groupBtn">Create Groups Now</button>
+      <button id="refreshBtn" class="secondary">Refresh Groups</button>
+    </div>
+    <div id="status" class="status">Ready.</div>
+    <section>
+      <h2 style="font-size:1.1rem; margin:1rem 0 0.5rem">Current Groups</h2>
+      <div id="groups" class="grid"></div>
+    </section>
+  </main>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    const groupsEl = document.getElementById('groups');
+    const groupBtn = document.getElementById('groupBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    async function listGroups() {
+      statusEl.textContent = 'Loading groups…';
+      try {
+        const resp = await fetch('/api/list-groups');
+        const data = await resp.json();
+        if (!data.ok) throw new Error(typeof data.error === 'object' ? JSON.stringify(data.error) : (data.error || 'Failed listing groups'));
+        renderGroups(data.records || []);
+        statusEl.textContent = `Loaded ${data.records?.length || 0} groups.`;
+      } catch (e) {
+        statusEl.textContent = 'Error loading groups: ' + e.message;
+      }
+    }
+
+    function renderGroups(records) {
+      groupsEl.innerHTML = '';
+      for (const r of records) {
+        const f = r.fields || {};
+        const members = (f.Members || '').split(',').map(s => s.trim()).filter(Boolean);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>${f.DatePreference || 'Unspecified'}</strong>
+            <span class="tag" style="background:#3D3024; color:#F5F0E8; margin-left:1rem;">${f.Vibe || 'Mixed Vibe'}</span>
+            <span class="meta" style="flex:1; text-align:right;">Size: ${f.Size || members.length || 0}</span>
+          </div>
+          <div style="margin-top:0.5rem;">
+            ${members.map(m => `<span class='tag'>${m}</span>`).join(' ')}
+          </div>
+          <div class="meta" style="margin-top:0.5rem;">Created: ${new Date(f.CreatedAt || r.createdTime).toLocaleString()}</div>
+        `;
+        groupsEl.appendChild(card);
+      }
+    }
+
+    groupBtn.addEventListener('click', async () => {
+      groupBtn.disabled = true;
+      statusEl.textContent = 'Grouping signups…';
+      try {
+        const resp = await fetch('/api/group', { method: 'POST' });
+        const data = await resp.json();
+        if (!data.ok) throw new Error(typeof data.error === 'object' ? JSON.stringify(data.error) : (data.error || 'Failed grouping'));
+        statusEl.textContent = `Created ${data.groups?.length || 0} group(s).`;
+        await listGroups();
+      } catch (e) {
+        statusEl.textContent = 'Error grouping: ' + e.message;
+      } finally {
+        groupBtn.disabled = false;
+      }
+    });
+
+    refreshBtn.addEventListener('click', listGroups);
+
+    // Initial load
+    listGroups();
+  </script>
+</body>
+</html>

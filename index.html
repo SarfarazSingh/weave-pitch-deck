@@ -1,15 +1,847 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weave Pitch Deck</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEAVE - Coffee Meetups for IMBA Students</title>
+    <meta name="description" content="Interest-based coffee meetups for IE IMBA students in Madrid. Meet people from other sections casually, in small groups, over coffee.">
+    <meta property="og:title" content="WEAVE - Coffee Meetups for IMBA Students">
+    <meta property="og:description" content="Small meetups. Real conversations. Madrid. Join 60+ IMBA students connecting over coffee.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://weavemeetups.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JK3B72QC94"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JK3B72QC94');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #F5F0E8;
+            color: #3D3024;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Soft earthy floating shapes */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 12s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #C9A87C;
+            top: -150px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #A7C4A0;
+            bottom: 10%;
+            left: -100px;
+            animation-delay: -3s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: #D4A574;
+            top: 50%;
+            right: 5%;
+            animation-delay: -6s;
+        }
+
+        .orb-4 {
+            width: 300px;
+            height: 300px;
+            background: #E8D5C4;
+            bottom: -100px;
+            left: 30%;
+            animation-delay: -9s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(20px, -20px) scale(1.03); }
+            66% { transform: translate(-15px, 15px) scale(0.97); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(245, 240, 232, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: #3D3024;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #8B7355;
+        }
+
+        .nav-link {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            color: #3D3024;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #8B7355;
+        }
+
+        /* Main content wrapper */
+        .main-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .headline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 500;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+            max-width: 750px;
+        }
+
+        .headline .highlight-1 { color: #8B7355; }
+        .headline .highlight-2 { color: #6B8E5E; }
+        .headline .highlight-3 { color: #C9A87C; }
+
+        .subheadline {
+            font-size: 1.1rem;
+            color: rgba(61, 48, 36, 0.75);
+            max-width: 520px;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        .tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            color: rgba(61, 48, 36, 0.6);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .badges {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .badge {
+            font-size: 0.9rem;
+            color: rgba(61, 48, 36, 0.6);
+            font-weight: 400;
+        }
+
+        /* CTA */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: inherit;
+            color: #F5F0E8;
+            background: #3D3024;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.03);
+            background: #5C483A;
+            box-shadow: 0 10px 40px rgba(61, 48, 36, 0.2);
+        }
+
+        .cta-button svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* Sold out notice */
+        .sold-out-notice {
+            background: linear-gradient(135deg, #6B8E5E 0%, #8B7355 100%);
+            color: #F5F0E8;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(107, 142, 94, 0.3);
+        }
+
+        /* How it works section */
+        .how-it-works {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 500;
+            margin-bottom: 3rem;
+            color: #3D3024;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            text-align: left;
+            padding: 1.75rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            border: 1px solid rgba(61, 48, 36, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(61, 48, 36, 0.08);
+        }
+
+        .step-number {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .step:nth-child(1) .step-number { background: #C9A87C; color: #3D3024; }
+        .step:nth-child(2) .step-number { background: #A7C4A0; color: #3D3024; }
+        .step:nth-child(3) .step-number { background: #D4A574; color: #3D3024; }
+        .step:nth-child(4) .step-number { background: #8B7355; color: #F5F0E8; }
+
+        .step-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #3D3024;
+        }
+
+        .step-content p {
+            font-size: 0.95rem;
+            color: rgba(61, 48, 36, 0.65);
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        /* Secondary CTA */
+        .cta-secondary {
+            margin-top: 2.5rem;
+        }
+
+        .urgency-text {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #8B7355;
+            font-weight: 500;
+        }
+
+        /* Testimonials carousel */
+        .testimonials {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonials-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            color: #3D3024;
+        }
+
+        .testimonial-carousel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial-slide {
+            min-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .testimonial-slide blockquote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            font-style: italic;
+            color: #3D3024;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-slide cite {
+            font-size: 0.95rem;
+            color: rgba(61, 48, 36, 0.6);
+            font-style: normal;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(61, 48, 36, 0.2);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: #8B7355;
+            transform: scale(1.2);
+        }
+
+        /* FAQ section */
+        .faq {
+            padding: 4rem 2rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .faq-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 500;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #3D3024;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(61, 48, 36, 0.1);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #3D3024;
+        }
+
+        .faq-question:hover {
+            color: #8B7355;
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            font-weight: 300;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding-bottom: 1.25rem;
+        }
+
+        .faq-answer p {
+            font-size: 0.95rem;
+            color: rgba(61, 48, 36, 0.7);
+            line-height: 1.6;
+        }
+
+        /* Stats section */
+        .stats {
+            padding: 4rem 2rem 8rem;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #3D3024;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat:nth-child(1) .stat-value { color: #8B7355; }
+        .stat:nth-child(2) .stat-value { color: #6B8E5E; }
+        .stat:nth-child(3) .stat-value { color: #C9A87C; }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(61, 48, 36, 0.55);
+            font-weight: 300;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            font-size: 0.85rem;
+            color: rgba(61, 48, 36, 0.5);
+            border-top: 1px solid rgba(61, 48, 36, 0.1);
+        }
+
+        footer a {
+            color: rgba(61, 48, 36, 0.5);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        footer a:hover {
+            color: #3D3024;
+        }
+
+        footer a svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav, footer {
+                padding: 1rem 1.5rem;
+            }
+
+            .orb {
+                filter: blur(80px);
+                opacity: 0.35;
+            }
+
+            .orb-1 { width: 300px; height: 300px; }
+            .orb-2 { width: 250px; height: 250px; }
+            .orb-3 { width: 200px; height: 200px; }
+            .orb-4 { width: 180px; height: 180px; }
+
+            .badges {
+                gap: 1rem;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+
+            .stats-grid {
+                gap: 1.5rem;
+            }
+
+            .stat {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    
+    <nav>
+        <a href="https://www.instagram.com/weave_meetups" target="_blank" class="logo">WEAVE</a>
+        <a href="#how-it-works" class="nav-link">How it works</a>
+    </nav>
+
+    <main class="main-content">
+        <section class="hero">
+            <h1 class="headline">
+                <span class="highlight-1">Small meetups.</span><br>
+                <span class="highlight-2">Real conversations.</span><br>
+                <span class="highlight-3">Madrid.</span>
+            </h1>
+            <p class="subheadline">
+                Interest-based meetups to help IMBA students meet people from other sections — casually, in small groups, over coffee.
+            </p>
+            <p class="tagline">
+                No dating. No awkward networking. Just genuine conversations.
+            </p>
+            <div class="badges">
+                <span class="badge">📍 Madrid</span>
+                <span class="badge">🎓 IMBA</span>
+                <span class="badge">☕ Coffee & Connection</span>
+            </div>
+            <div class="sold-out-notice">
+                🎉 Sunday's meetup is full! Sign up for future meetups below.
+            </div>
+            <button class="cta-button" id="open-signup">
+                Sign Up for Future Meetups
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </button>
+        </section>
+
+        <section id="how-it-works" class="how-it-works">
+            <h2 class="section-title">How it works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Sign up</h3>
+                        <p>Complete a quick 1–2 minute questionnaire about your interests</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Get matched</h3>
+                        <p>We match you with 5–6 people based on shared interests</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Confirm your spot</h3>
+                        <p>Pay €4 to secure your place at the meetup</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Meet up</h3>
+                        <p>We send you the café location for your coffee meetup</p>
+                    </div>
+                </div>
+            </div>
+            <button class="cta-button cta-secondary" id="open-signup-2">
+                Join the next meetup
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </button>
+            <p class="urgency-text">🗓 Next meetup: Jan 18th — limited spots</p>
+        </section>
+
+        <section class="testimonials">
+            <h2 class="testimonials-title">What students are saying</h2>
+            <div class="testimonial-carousel">
+                <div class="testimonial-slides" id="testimonial-slides">
+                    <div class="testimonial-slide">
+                        <blockquote>"I was nervous at first, but everyone was so friendly. Met some amazing people from Section 3 I never would have talked to otherwise!"</blockquote>
+                        <cite>— IMBA '26, Section 1</cite>
+                    </div>
+                    <div class="testimonial-slide">
+                        <blockquote>"Best €4 I've spent in Madrid. The vibe was super chill and now I have a study group for finance!"</blockquote>
+                        <cite>— IMBA '26, Section 5</cite>
+                    </div>
+                    <div class="testimonial-slide">
+                        <blockquote>"Finally met people outside my section bubble. We're already planning to do another coffee together."</blockquote>
+                        <cite>— IMBA '26, Section 2</cite>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-dots" id="carousel-dots">
+                <button class="carousel-dot active" data-slide="0"></button>
+                <button class="carousel-dot" data-slide="1"></button>
+                <button class="carousel-dot" data-slide="2"></button>
+            </div>
+        </section>
+
+        <section class="faq">
+            <h2 class="faq-title">Frequently asked questions</h2>
+            
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>What happens at a meetup?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>You meet 5–6 students at a local café. We provide conversation starters to break the ice, but most groups end up chatting naturally about classes, travel, life in Madrid, and more!</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Why is there a €4 fee?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>The small fee covers café reservations and ensures people actually show up. No-shows ruin the experience for everyone. Your coffee is on you!</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>What if I don't know anyone?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>That's the whole point! Everyone is there to meet new people. We match you with students from different sections so you can expand your network beyond your usual circle.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How are groups matched?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>We use your questionnaire answers to match you with people who have similar vibes and interests. We also mix sections intentionally for diversity.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Can I bring a friend?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Of course! Just have them sign up too so we can match you in the same group if you'd like, or put you in different groups to meet even more people.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">60+</div>
+                    <div class="stat-label">students already signed up</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">☕</div>
+                    <div class="stat-value">10+</div>
+                    <div class="stat-label">partner cafés</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">✨</div>
+                    <div class="stat-value">1–2</div>
+                    <div class="stat-label">meetups per week</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Signup Modal + Tally Embed -->
+    <style>
+        .modal-overlay { position: fixed; inset: 0; background: rgba(61,48,36,0.4); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 200; }
+        .modal-overlay.open { display: flex; }
+        .modal { width: min(720px, 92vw); height: 85vh; background: #FFFFFFF2; border: 1px solid rgba(61,48,36,0.12); border-radius: 18px; box-shadow: 0 20px 60px rgba(61,48,36,0.20); overflow: hidden; position: relative; }
+        .close-btn { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.8); border: none; font-size: 1.2rem; color: #3D3024; cursor: pointer; padding: 0.25rem 0.6rem; border-radius: 50%; z-index: 10; font-weight: bold; }
+        .close-btn:hover { background: rgba(255,255,255,1); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .tally-frame { width: 100%; height: 100%; border: none; }
+        /* Prevent background scroll when modal open */
+        .no-scroll { overflow: hidden; }
+    </style>
+
+    <div id="signup-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true">
+            <button class="close-btn" aria-label="Close" data-close-modal>✕</button>
+            <iframe class="tally-frame" src="https://tally.so/r/D4qpJq?transparentBackground=1" title="WEAVE Signup"></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <span>© 2026 WEAVE</span>
+        <a href="https://www.instagram.com/weave_meetups?igsh=MXN4dWhwZ2tqaG4xMQ%3D%3D&utm_source=qr" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            @weave_meetups
+        </a>
+    </footer>
+    <script>
+        // Open/close modal with body scroll lock
+        const openBtn = document.getElementById('open-signup');
+        const modal = document.getElementById('signup-modal');
+        const openModal = () => {
+            modal.classList.add('open');
+            document.body.classList.add('no-scroll');
+        };
+        const closeModal = () => {
+            modal.classList.remove('open');
+            document.body.classList.remove('no-scroll');
+        };
+        openBtn && openBtn.addEventListener('click', openModal);
+        const openBtn2 = document.getElementById('open-signup-2');
+        openBtn2 && openBtn2.addEventListener('click', openModal);
+        document.querySelectorAll('[data-close-modal]').forEach(btn => btn.addEventListener('click', closeModal));
+        // Close when clicking overlay background
+        modal && modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        // Close on Escape
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+        // Testimonial carousel
+        const slides = document.getElementById('testimonial-slides');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let currentSlide = 0;
+        const totalSlides = 3;
+
+        function goToSlide(index) {
+            currentSlide = index;
+            slides.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                goToSlide(parseInt(dot.dataset.slide));
+            });
+        });
+
+        // Auto-advance carousel every 5 seconds
+        setInterval(() => {
+            goToSlide((currentSlide + 1) % totalSlides);
+        }, 5000);
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                // Toggle clicked
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+    </script>
+</body>
 </html>
