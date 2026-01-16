@@ -24,6 +24,21 @@
             color: #3D3024;
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle noise texture for paper feel */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         /* Soft earthy floating shapes */
@@ -198,16 +213,17 @@
             transform: translateX(3px);
         }
 
-        /* Sold out notice */
+        /* Sold out notice - Elegant Style */
         .sold-out-notice {
-            background: linear-gradient(135deg, #6B8E5E 0%, #8B7355 100%);
-            color: #F5F0E8;
-            padding: 0.75rem 1.5rem;
+            background: rgba(61, 48, 36, 0.03);
+            border: 1px solid rgba(61, 48, 36, 0.1);
+            color: #3D3024;
+            padding: 0.6rem 1.2rem;
             border-radius: 50px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 500;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 15px rgba(107, 142, 94, 0.3);
+            margin-bottom: 2rem;
+            letter-spacing: 0.02em;
         }
 
         /* How it works section */
@@ -404,26 +420,25 @@
 
     <main class="main-content">
         <section class="hero">
-            <h1 class="headline">
-                <span class="highlight-1">Small meetups.</span><br>
-                <span class="highlight-2">Real conversations.</span><br>
-                <span class="highlight-3">Madrid.</span>
+            <h1 class="headline">Beyond your section.</span><br>
+                <span class="highlight-2">Expand your circle.</span>
             </h1>
             <p class="subheadline">
-                Interest-based meetups to help IMBA students meet people from other sections — casually, in small groups, over coffee.
+                The IMBA moves fast. Don't stay in the bubble. Weave connects you with students from other sections for curated, low-stakes coffee conversations.
             </p>
             <p class="tagline">
-                No dating. No awkward networking. Just genuine conversations.
+                Curated conversations for the curious.
             </p>
             <div class="badges">
                 <span class="badge">📍 Madrid</span>
-                <span class="badge">🎓 IMBA</span>
+                <span class="badge">Use your IE email</span>
                 <span class="badge">☕ Coffee & Connection</span>
             </div>
             <div class="sold-out-notice">
-                🎉 Sunday's meetup is full! Sign up for future meetups below.
+                Sunday's meetup is fully booked. Join the waitlist for next week.
             </div>
             <button class="cta-button" id="open-signup">
+                Join the Waitlist"open-signup">
                 Sign Up for Future Meetups
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
